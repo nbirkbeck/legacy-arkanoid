@@ -75,7 +75,7 @@ int consoleFunc(int wparam)
 			{
 				if(wparam==SDLK_UP)
 				{
-					sprintf(str,last);
+                                  sprintf(str, "%s", last);
 					stri=strlen(last);
 					return 1;
 				}
@@ -127,7 +127,7 @@ int consoleFunc(int wparam)
 						{
 							char temp[255];
 							sprintf(temp,"\\%s",start);
-							sprintf(str,temp);
+							sprintf(str, "%s", temp);
 							stri=strlen(str);
 						}
 						c++;
@@ -142,7 +142,7 @@ int consoleFunc(int wparam)
 				}
 				else if(wparam==SDLK_RETURN)
 				{
-					sprintf(last,str);
+                                  sprintf(last,"%s", str);
 					if(str[0]=='/'||str[0]=='\\')
 					{
 						int c=0;

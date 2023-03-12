@@ -32,7 +32,7 @@ int initPaddle(PADDLE * p)
 	p->laserHead=0;
 	p->lasers=0;
 	p->lives=PADDLE_DEFAULT_LIVES;
-	p->laserReloadedIn;
+	p->laserReloadedIn = 0;
 	debug=fopen("debug.txt","w");
 	return 1;
 }
@@ -190,6 +190,7 @@ int checkForCollision(PADDLE *p,BALL *b)
 			b->dir.x*=-1;
 		}
 	}
+        return 0;
 }
 
 int checkForCollisionPup(PADDLE *p,POWERUP *b)
@@ -302,6 +303,7 @@ int checkForCollisionPup(PADDLE *p,POWERUP *b)
 			}
 		}
 	}
+        return 0;
 }
 
 

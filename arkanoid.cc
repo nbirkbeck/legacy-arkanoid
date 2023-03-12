@@ -118,34 +118,43 @@ void  updateScreen()
 
 SDL_Surface* createShadow(SDL_Surface* source,int width, int height)
 {
+  SDL_Surface* src32 = SDL_CreateRGBSurface(0, source->w, source->h, 32, 0,0,0,0);
+  SDL_BlitSurface(source, nullptr, src32, nullptr);
+
   SDL_Surface* shadow = SDL_CreateRGBSurface(0, width,height,32, 0,0,0,0);
 
 	
   // TODO: lock the display surface "source"
-  SDL_LockSurface(source);
+  SDL_LockSurface(src32);
   SDL_LockSurface(shadow);
 
-  uint32_t * source_ptr = (uint32_t*) source->pixels;
   uint32_t * dest_ptr = (uint32_t*) shadow->pixels;
 
   int black = 0;
-  int shadowColor = SDL_MapRGB(source->format, 6,6,6);
+  int shadowColor = SDL_MapRGB(shadow->format, 6,6,6);
 
-
+  int src_stride =  src32->pitch / 4;
+  int dest_stride =  shadow->pitch / 4;
+  memset(dest_ptr, 0, 4 * width * height);
   for(int y=0;y<height;y++)
   {
+    uint32_t* source_row = (uint32_t*)((char*)src32->pixels + y * src32->pitch);
     for(int x=0;x<width;x++)
     {
-      if(source_ptr[y*width+x]!=black)
+      if(source_row[x]!=black)
       {
-        dest_ptr[y*width+x]=shadowColor;
+        dest_ptr[y*dest_stride+x]=shadowColor;
       }
-       else dest_ptr[y*width+x]=black;
+       else dest_ptr[y*dest_stride+x]=black;
     }
   }
 
-  SDL_UnlockSurface(source);
+  SDL_UnlockSurface(src32);
   SDL_UnlockSurface(shadow);
+
+  SDL_FreeSurface(src32);
+  
+  SDL_SetColorKey(shadow, 1, 0);
   return shadow;
 }
 
@@ -636,7 +645,7 @@ int giveFunc(char * str)
 	if(strstr(lwr,"sticky")==lwr)
 	{
 		int value=1;
-		int tstr[12];
+		char tstr[12];
 
 		sscanf(lwr,"%s %d",tstr,&value);
 		paddle.sticky=value;
@@ -648,7 +657,7 @@ int giveFunc(char * str)
 	
 		paddle.lasers=bullets;
 		
-		if(sscanf(lwr,"%s %s %d",temp,&bullets))
+		if(sscanf(lwr,"%s %d",temp,&bullets))
 			paddle.lasers=bullets;
 		
 	}
@@ -804,6 +813,7 @@ int Game_Init()
     ll = SDL_LoadBMP("textures/paddleleftlaser.bmp");
     rl = SDL_LoadBMP("textures/paddlerightlaser.bmp");
     bull = SDL_LoadBMP("textures/bullet.bmp");
+
     SDL_SetColorKey(ll, 1, 0);
     SDL_SetColorKey(rl, 1, 0);
     SDL_SetColorKey(bull, 1, 0);
@@ -867,7 +877,7 @@ int Game_Init()
   initMessages();
   loadFont(&font,"fonts/font30_2",30);
   loadFont(&font12,"fonts/font",12);
-  readLevel("long",bricks);
+  readLevel("long.txt",bricks);
 
   initConsole(20,&font12);
   addCommand("exit",exitFunc);

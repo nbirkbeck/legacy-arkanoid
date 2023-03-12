@@ -30,7 +30,7 @@ void moveBall(BALL * b)
 	{
 		b->wonky--;
 		
-			b->dir.x+=b->dir.x*(float)(rand())*(rand()%2==0)?0.5f:-0.5f;
+                b->dir.x+=b->dir.x*(float)(rand())*((rand()%2==0)?0.5f:-0.5f);
 			//b->dir.y+=b->dir.y*(float)(rand())*(rand()%2==0)?1.0f:-1.0f;
 			normalize(&b->dir);
 

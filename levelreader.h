@@ -69,8 +69,9 @@ int readLevel(const char * filename,BRICK bricks[BHEIGHT][BWIDTH])
 	int i=0;
 	int j=0;
 	static int called=0;
-
-	FILE * file = fopen(filename,"r");
+        char full_filename[128];
+        snprintf(full_filename, sizeof(full_filename), "levels/%s", filename);
+	FILE * file = fopen(full_filename,"r");
 	rdebug = fopen("debugread.txt","w");
 
 
@@ -142,7 +143,7 @@ int readLevel(const char * filename,BRICK bricks[BHEIGHT][BWIDTH])
 	fclose(rdebug);
 	const char * lastdot = strrchr(filename,'.');
 	if(lastdot==NULL)
-		sscanf(levelName,filename);
+          sscanf(filename, "%s", levelName);
 	else
 	{
 		memcpy(levelName,filename,lastdot-filename);
