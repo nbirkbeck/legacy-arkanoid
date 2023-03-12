@@ -1,29 +1,26 @@
 #include <SDL2/SDL.h>
-#include <unistd.h>
-#include <time.h>
 #include <iostream>
 #include <sys/time.h>
+#include <time.h>
+#include <unistd.h>
 
 #ifdef __EMSCRIPTEN__
 #include <emscripten.h>
 #endif
 
-void DDraw_DrawSized_Surface(SDL_Surface* src,
-                             int x, int y, int w, int h, int sw, int sh,
-                             SDL_Surface* dest, int transparent) {
+void DDraw_DrawSized_Surface(SDL_Surface* src, int x, int y, int w, int h,
+                             int sw, int sh, SDL_Surface* dest,
+                             int transparent) {
   SDL_Rect src_rect = {0, 0, w, h};
   SDL_Rect dest_rect = {x, y, sw, sh};
   SDL_BlitScaled(src, &src_rect, dest, &dest_rect);
 }
 
-void DDraw_Draw_Surface(SDL_Surface* src,
-                        int x, int y, int w, int h,
+void DDraw_Draw_Surface(SDL_Surface* src, int x, int y, int w, int h,
                         SDL_Surface* dest, int transparent) {
   SDL_Rect dest_rect = {x, y, w, h};
   SDL_BlitScaled(src, nullptr, dest, &dest_rect);
 }
-
-
 
 int32_t GetTickCount() {
   static bool init = false;

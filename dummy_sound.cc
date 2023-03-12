@@ -1,8 +1,8 @@
-#include <iostream>
 #include <SDL2/SDL_audio.h>
+#include <iostream>
 
 namespace {
-  SDL_AudioDeviceID audio_dev = 0;
+SDL_AudioDeviceID audio_dev = 0;
 }
 
 void LazyInit();
@@ -22,9 +22,8 @@ struct Sound {
   }
 };
 
-
 namespace {
-  Sound break_sound;
+Sound break_sound;
 };
 
 int playBreakSound() {
@@ -41,7 +40,9 @@ void LazyInit() {
   desired_audio_spec.callback = 0;
 
   SDL_AudioSpec audio_spec;
-  audio_dev = SDL_OpenAudioDevice(nullptr, 0, &desired_audio_spec, &audio_spec, 0);
+  audio_dev =
+      SDL_OpenAudioDevice(nullptr, 0, &desired_audio_spec, &audio_spec, 0);
 
-  SDL_LoadWAV("sounds/break1.wav", &audio_spec, &break_sound.audio_buf, &break_sound.audio_len);
+  SDL_LoadWAV("sounds/break1.wav", &audio_spec, &break_sound.audio_buf,
+              &break_sound.audio_len);
 }
